@@ -21,8 +21,8 @@
     //引入smarty
     require ROOT_PATH.'/smarty/Smarty.class.php';
 
-    //自动加载类
-    function __autoload($className){
+    //自动加载函数
+    function myAutoLoad($className){
         if (substr($className,-6) == 'Action') {
             require ROOT_PATH.'/controller/'.$className.'.class.php';
         } elseif (substr($className,-5) == 'Model'){
@@ -34,8 +34,14 @@
         }
 
     }
-    
 
+    //使用 spl_autoload_register 注册自己自动加载函数，防止与smarty的自动加载函数冲突
+    spl_autoload_register('myAutoLoad');
+
+
+
+    //单一入口
+    Factory::setAction()->run();
 
 
 

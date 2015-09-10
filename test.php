@@ -1,29 +1,35 @@
 <?php
-session_start();
-//错误级别
-error_reporting(E_ALL);
-//创建一个实际路径
-define('ROOT_PATH',substr(dirname(__FILE__),0,-8));
-//设置编码
-header('Content-Type:text/html;charset=utf-8');
-//设置时区
-date_default_timezone_set('Asia/Shanghai');
-//引入系统配置文件
-require ROOT_PATH.'/configs/profile.inc.php';
-//引入Smarty
-require ROOT_PATH.'/smarty/Smarty.class.php';
-//自动加载类
-function __autoload($_className) {
-    if (substr($_className, -6) == 'Action') {
-        require ROOT_PATH.'/controller/'.$_className.'.class.php';
-    } elseif (substr($_className, -5) == 'Model') {
-        require ROOT_PATH.'/model/'.$_className.'.class.php';
-    } elseif (substr($_className, -5) == 'Check') {
-        require ROOT_PATH.'/check/'.$_className.'.class.php';
-    } else {
-        require ROOT_PATH.'/public/'.$_className.'.class.php';
+//TPL继承smarty
+class TPL extends Smarty {
+    //用于存放实例化的对象
+    static private $_instance;
+    
+    //公共静态方法获取实例化的对象
+    static public function getInstance() {
+        if (!(self::$_instance instanceof self)) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    }
+    
+    //私有克隆
+    private function __clone() {}
+    
+    //私有构造
+    private function __construct() {
+        $this->setConfigs();
+    }
+    
+    //重写Smarty配置
+    private function setConfigs() {
+        $this->template_dir = SMARTY_TEMPLATE_DIR;
+        $this->compile_dir = SMARTY_COMPILE_DIR;
+        $this->config_dir = SMARTY_CONFIG_DIR;
+        $this->cache_dir = SMARTY_CACHE_DIR;
+        $this->caching = SMARTY_CACHING;
+        $this->cache_lifetime = SMARTY_CACHE_LIFETIME;
+        $this->left_delimiter = SMARTY_LEFT_DELIMITER;
+        $this->right_delimiter = SMARTY_RIGHT_DELIMITER;
     }
 }
-//单入口
-Factory::setAction()->run();
 ?>
