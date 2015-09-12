@@ -8,7 +8,14 @@ class Factory{
         $a = self::getA();
         if (!file_exists(ROOT_PATH.'/controller/'.$a.'Action.class.php'))  $a = 'Index';
         //前面已经有了自动加载类，可以直接实例化
-        eval('self::$obj = new '.ucfirst($a).'Action');
+        eval('self::$obj = new '.ucfirst($a).'Action();');
+        return self::$obj;
+    }
+
+    static public function setModel(){
+        $a = self::getA();
+        if (file_exists(ROOT_PATH.'/model/'.$a.'Model.class.php'))  eval('self::$obj = new '.ucfirst($a).'Model();');
+        //前面已经有了自动加载类，可以直接实例化
         return self::$obj;
     }
 
@@ -19,6 +26,8 @@ class Factory{
         }
         return 'Index';
     }
+
+
 
     
 

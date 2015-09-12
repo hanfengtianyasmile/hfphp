@@ -1,7 +1,7 @@
 <?php 
 
 //配置smarty
-define('SMARTY_FRONT', 'default/');//皮肤
+define('SMARTY_FRONT', 'index/');//皮肤
 define('SMARTY_ADMIN', 'admin/');//后台皮肤
 define('SMARTY_TEMPLATE_DIR', ROOT_PATH.'/view/');//模板目录
 define('SMARTY_COMPILE_DIR', ROOT_PATH.'/compile/');//编译目录
@@ -13,7 +13,12 @@ define('SMARTY_LEFT_DELIMITER', '{');//左定界符
 define('SMARTY_RIGHT_DELIMITER', '}');//右定界符
 
 
-
+//设置数据库连接参数
+define('DB_DNS', 'mysql:host=localhost;dbname=hanfeng');//数据库的dns
+define('DB_USER', 'root');//用户名
+define('DB_PASS', '');//密码
+define('DB_CHARSET', 'UTF8');//字符集
+define('DB_FREFIX', 'hanfeng_');//表前缀
 
 
 

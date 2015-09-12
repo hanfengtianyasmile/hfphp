@@ -21,8 +21,9 @@ final class TPL extends Smarty{
 
     }
 
-    //私有构造,防止子类调用构造方法
-    private function __construct(){
+    //原smarty中构造方法为pubic,只好改为protected,保证可以被TPL中构造方法调用，但是在TPL中也只能是protected或者public、、、、好像单例模式不能很好地体现出来了。
+    protected function __construct(){
+        parent::__construct();
         $this->setConfigs();
     }
 

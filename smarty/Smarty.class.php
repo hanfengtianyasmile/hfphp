@@ -749,7 +749,7 @@ class Smarty extends Smarty_Internal_TemplateBase
     /**
      * Initialize new Smarty object
      */
-    public function __construct()
+    protected function __construct()
     {
         if (is_callable('mb_internal_encoding')) {
             mb_internal_encoding(Smarty::$_CHARSET);
