@@ -3,8 +3,8 @@
     //开启session
     session_start();
 
-    //错误级别,全部显示
-    error_reporting(E_ALL);
+    //错误级别,部分显示
+    error_reporting(E_ALL  & ~E_STRICT & ~E_DEPRECATED);
 
     //创建一个实际路径
     define('ROOT_PATH',substr(dirname(__FILE__),0,-8));

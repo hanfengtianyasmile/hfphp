@@ -2,18 +2,21 @@
 
 class IndexAction extends Action{
     
+    private $test;
 
     public function __construct(){
         parent::__construct();
+        $this->test = new testModel();
     }
 
     public function index(){
-        $test = new testModel();
-        $data['name'] = 'li';
-        $data['password'] = Tool::pass('1234');
-        echo $test->add($data);
+        
+        
+        $fields = array('id','name');
+        var_dump($this->test->select($fields));
         // $this->tpl->display(SMARTY_FRONT.'index/index.html');
     }
+
 
     
 

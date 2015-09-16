@@ -13,7 +13,7 @@ class DB{
     private $pdo = null;
 
     //公共静态方法获取实例化的对象
-    static public function getInstance(){
+    static protected function getInstance(){
         //判断self::$instance 是否已经被实例化
         if (!self::$instance instanceof self) {
             self::$instance = new self();
@@ -38,9 +38,9 @@ class DB{
 
 
     //增加
-    protected function addDB($tables,Array $data){
-        $addFileds = array_keys($data);
-        $addValues = array_values($data);
+    protected function addDB($tables,Array $addData){
+        $addFileds = array_keys($addData);
+        $addValues = array_values($addData);
 
         $addFileds = implode(',',$addFileds);
         $addValues = implode("','", $addValues);
@@ -50,6 +50,94 @@ class DB{
         return $this->execute($sql)->rowCount();
      
     }
+
+    //修改
+    //传入三个数组，分别是修改表名，修改的条件，修改的key与value
+    protected function update($tables,Array $param,Array $updateData){
+        $where  = $setData = '';
+
+        foreach ($param as $key => $value) {
+            $where .= $key.' = '.$value.' AND ';
+        }
+
+        $where = ' WHERE '.substr($where,0,-4);
+
+        foreach ($updateData as $key => $value) {
+            $setData .= " $key = '$value',";
+        }
+
+        $setData = substr($setData, 0,-1);
+
+        $sql = "UPDATE $tables[0] SET $setData $where";
+
+        return $this->execute($sql)->rowCount();
+    }
+
+
+    //判断某个数据是否存在
+    protected function isOne($tables,Array $param){
+        $where = '';
+        foreach ($param as $key => $value) {
+            $where .= "$key = $value AND ";
+        }
+        $where = ' WHERE '.substr($where,0,-4);
+
+        $sql = "SELECT id FROM $tables[0] $where LIMIT 1";
+        return $this->execute($sql)->rowCount();
+    }
+
+
+    //删除某个数据
+    protected function delete($tables,Array $param){
+        $where = '';
+        foreach ($param as $key => $value) {
+            $where .= "$key = $value AND ";   
+        }
+        $where = ' WHERE '.substr($where,0,-4);
+
+        $sql = "DELETE  FROM $tables[0] $where LIMIT 1";
+
+        return $this->execute($sql)->rowCount();   
+    }
+
+
+    //查询
+    protected function select($tables,Array $fields,Array $param = array()){
+        $limit = $where = $like = $order = '';
+
+        if (is_array($param) && count($param) != 0) {
+            $limit = isset($param['limit']) ? $param['limit'] : '';
+            $order = isset($param['order']) ? 'ORDER BY '.$param['order'] : '';
+
+            if(isset($param['where'])){
+                foreach ($param['where'] as $key => $value) {
+                    $where .= "$key = $value AND ";
+                }
+                $where = ' WHERE '.substr($where,0,-4);
+            }
+
+            if (isset($param['like'])) {
+                foreach ($param['like'] as $key => $value) {
+                    $like .= "$key LIKE '%$value%' AND";
+                }
+                $like = ' WHERE '.substr($like,0,-4);
+            }
+        }
+
+        $selectFields = implode(',',$fields);
+        $table = isset($tables[1]) ? $tables[0].','.$tables[1] : $tables[0];
+        $sql = "SELECT $selectFields FROM $table $where $like $order $limit;";
+        $stm = $this->execute($sql);
+        $result = array();
+        while (!!$obj = $stm->fetch(PDO::FETCH_ASSOC)) {
+            $result[] = $obj;
+        }
+
+        return $result;
+
+    }
+
+
 
 
     //执行SQL语句
