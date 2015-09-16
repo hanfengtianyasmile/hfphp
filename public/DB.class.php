@@ -23,19 +23,45 @@ class DB{
 
     //私有克隆，防止被克隆
     private function __clone(){
-        
+
     }
 
     //私有构造
     private function __construct(){
         try {
-            $this->_pdo = new PDO(DB_DNS, DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND=>'SET NAMES '.DB_CHARSET));
-            $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo = new PDO(DB_DNS, DB_USER, DB_PASS, array(PDO::MYSQL_ATTR_INIT_COMMAND=>'SET NAMES '.DB_CHARSET));
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             exit($e->getMessage());
         }
     }
 
+
+    //增加
+    protected function addDB($tables,Array $data){
+        $addFileds = array_keys($data);
+        $addValues = array_values($data);
+
+        $addFileds = implode(',',$addFileds);
+        $addValues = implode("','", $addValues);
+
+        $sql = "INSERT INTO $tables[0] ($addFileds) VALUES ('$addValues');";
+
+        return $this->execute($sql)->rowCount();
+     
+    }
+
+
+    //执行SQL语句
+    private function execute($sql){
+        try {
+            $res = $this->pdo->prepare($sql);
+            $res->execute();
+        } catch (PDOException $e) {
+            exit('SQL语句:'.$sql.'错误，错误信息是:'.$e->getMessage());
+        }
+        return $res;
+    }
     
 
 
