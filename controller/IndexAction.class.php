@@ -9,13 +9,26 @@ class IndexAction extends Action{
         $this->test = new testModel();
     }
 
-    public function index(){
+    public function upload(){
+
+
+
+
+        $fileupload = new FileUpload('pic',400);
         
+        echo $fileupload->getPath();
         
-        $fields = array('id','name');
-        var_dump($this->test->select($fields));
-        // $this->tpl->display(SMARTY_FRONT.'index/index.html');
     }
+
+    public function index(){
+        $_path = $_SERVER["SCRIPT_NAME"];
+        echo $_path;
+        $_dir = dirname($_path);
+        echo $_dir;
+        $this->tpl->display(SMARTY_FRONT.'index/index.html');
+    }
+
+    
 
 
     

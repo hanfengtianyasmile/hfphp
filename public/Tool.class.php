@@ -9,6 +9,14 @@ class Tool{
     }
 
 
+
+    //alert弹出函数
+    static public function alert($str){
+        echo "<script type='text/javascript'>alert('$str');</script>";
+    }
+    
+
+
 }
 
 

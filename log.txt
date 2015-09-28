@@ -1,0 +1,15 @@
+1.重定向功能bug
+
+2.上传文件类
+
+//返回路径
+public function getPath() {
+    $path = $_SERVER["SCRIPT_NAME"];
+    $dir = dirname(dirname($path));
+    if ($dir == '\\') $dir = '/';
+    $this->linkpath = $dir.$this->linkpath;
+    return $this->linkpath;
+}
+
+为啥这样
+

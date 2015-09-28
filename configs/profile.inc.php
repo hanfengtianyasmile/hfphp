@@ -22,6 +22,10 @@ define('DB_FREFIX', 'hanfeng_');//表前缀
 
 
 
+//设置上传目录
+define('UPDIR', 'upload/');
+
+
 
 
 

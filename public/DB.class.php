@@ -111,7 +111,7 @@ class DB{
 
             if(isset($param['where'])){
                 foreach ($param['where'] as $key => $value) {
-                    $where .= "$key = $value AND ";
+                    $where .= " $value AND ";
                 }
                 $where = ' WHERE '.substr($where,0,-4);
             }
@@ -138,7 +138,28 @@ class DB{
     }
 
 
+    //总记录
+    protected function total($tables,Array $param = array()){
+        $where = '';
+        if (isset($param['where'])) {
+            foreach ($param['where'] as $key => $value) {
+                $where .= $value.' AND ';
+            }
+            $where = substr($where,0,-4);
+        }
+        $sql = "SELECT COUNT(*) as count FROM $tables[0] $where";
+        $stm = $this->execute($sql);
+        return $stm->fetchObiect()->count;
+    }
 
+    //得到下一个ID
+    protected function nextId($tables){
+        $sql = "SHOW TABLE STATUS LIKE '$tables[0]' ";
+        $stm = $this->execute($sql);
+        return $stm->fetchObiect->Auto_increment;
+    }
+
+    
 
     //执行SQL语句
     private function execute($sql){
@@ -150,6 +171,9 @@ class DB{
         }
         return $res;
     }
+
+
+
     
 
 

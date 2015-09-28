@@ -5,11 +5,13 @@
 class Action{
     protected $tpl = null;
     protected $model = null;
+    protected $redirect = null;
 
 
     protected function __construct(){
         $this->tpl = TPL::getInstance();
         $this->model = Factory::setModel();
+        $this->redirect = Redirect::getInstance();
     }
 
     public function run(){
