@@ -21,11 +21,10 @@ class IndexAction extends Action{
     }
 
     public function index(){
-        $_path = $_SERVER["SCRIPT_NAME"];
-        echo $_path;
-        $_dir = dirname($_path);
-        echo $_dir;
-        $this->tpl->display(SMARTY_FRONT.'index/index.html');
+        echo ROOT_PATH.'/code.jpeg';
+        $img = new Image('/code.jpeg');
+        $img->thumb(100,200);
+        $img->out();
     }
 
     
